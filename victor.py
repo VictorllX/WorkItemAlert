@@ -167,9 +167,9 @@ for name in names:
                 try:
                     print(3) 
                     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                    server.login("email", "pass")
+                    account = server.login("email", "pass")
                     message = 'Subject: {}\n\n{}'.format(subject, msg)
-                    server.sendmail("email", email, message)    
+                    sendToUser = server.sendmail("email", email, message)    
                     server.quit()
                     print("Email sent successfully!!!!!!")
                 except:
@@ -202,9 +202,9 @@ if z > 0:
             try:
                 print(3) 
                 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                server.login("email", "pass")
+                account = server.login("email", "pass")
                 message = 'Subject: {}\n\n{}'.format(subject, msg)
-                server.sendmail("email", "DL-Cloud-Transformation@cbts.com", message)    
+                sendToTeam = server.sendmail("email", "DL-Cloud-Transformation@cbts.com", message)    
                 server.quit()
                 print("Email sent successfully!!!!!!")
             except:
@@ -229,147 +229,5 @@ elif z == 0:
     print("No email ")              
 print(z)
 exit()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#Filters the work item information to obtain only name, email, title, priority, url and id
-z=0
-print("Day of the week: " + str(date.today().weekday()))
-if date.today().weekday() == 4:
-    for x in query_results.work_items:
-        
-        variable=work_tracking_client.get_work_item(id=x.id)
-        assignedTo = (variable.fields['System.AssignedTo'])
-        teamEmail = re.findall(r"([a-zA-Z0-9-_.]+@[a-zA-Z0-9-_.]+)", assignedTo)
-        teamName = re.findall(r"[^\.]+", teamEmail[0])
-        priority = (variable.fields['Microsoft.VSTS.Common.Priority'])
-        systemTitle = (variable.fields['System.Title'])
-        link = variable.url
-        idNumber = variable.id
-        result = "-----------------------------------------------------------------------------------------\nAssigned to: " + str(teamName[0]) + "\nTitle: " + str(systemTitle) + "\nPriority: " + str(priority) + "\nLink: " + str(link) + "\n-----------------------------------------------------------------------------------------"
-        textFile=open("fib.txt","a")
-        emailMessage = textFile.write(result+"\n") 
-        textFile.close()
-        z=z+1 
-    print("Number of work items : " + str(z))       
-
-#Contains email login/connection and sends the text file to the email
-    if z>=1:
-        def send_email(subject, msg):
-                try: 
-                    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                    server.login("workitemtracker@gmail.com", "Stephanie16")
-                    message = 'Subject: {}\n\n{}'.format(subject, msg)
-                    server.sendmail("workitemtracker@gmail.com", "workitemtracker@gmail.com", message)    
-                    server.quit()
-                    print("Email sent successfully!!!!!!")
-                except:
-                    print("Email failed to send!")    
-        subject = "Work-Item Alert"
-        fileOut=open("fib.txt", "r")
-        fileContent = fileOut.read()
-        msg = ("Within the past 30 days "+ str(z) + " work items have not been changed\n\n" + fileContent)
-        fileOut.close()
-        #send_email(subject, msg)
-#Deletes file after sending the email so that next time the code runs it wont add to the past items
-        os.remove("fib.txt")
-        print("File Removed!")
-        print("Friday")
-    elif z == 0:
-        print("Congratulation no work items are needed to be worked on")    
-#elif date.today().weekday() == 0 or date.today().weekday() == 1 or date.today().weekday() == 2 or date.today().weekday() == 3:
-elif date.today().weekday() < 4:
-
-#    for workitem in query_results.work_items:
-        
-
-    users=[]
-    for workitem in query_results.work_items:
-        variable=work_tracking_client.get_work_item(id=workitem.id)
-
-        assignedTo = (variable.fields['System.AssignedTo'])
-        teamEmail = re.findall(r"([a-zA-Z0-9-_.]+@[a-zA-Z0-9-_.]+)", assignedTo)
-        teamName = re.findall(r"[^\.]+", teamEmail[0]) 
-        systemTitle = (variable.fields['System.Title'])
-        priority = (variable.fields['Microsoft.VSTS.Common.Priority'])
-        link = variable.url
-        idNumber = variable.id
-        if not teamEmail in users:
-            users = users + teamEmail
-
-    def Remove(users): 
-        final_list = [] 
-        for num in users: 
-            if num not in final_list: 
-                final_list.append(num)
-                result = "-----------------------------------------------------------------------------------------\nAssigned to: " + str(teamName[0]) + "\nTitle: " + str(systemTitle) + "\nPriority: " + str(priority) + "\nLink: " + str(link) + "\n-----------------------------------------------------------------------------------------"
-                textFile=open("COOL.txt","a")
-                emailMessage = textFile.write(result+"\n") 
-                textFile.close() 
-        return final_list 
-    print(Remove((users)))      
-            
-
-
-
-    for x in query_results.work_items:
-
-        variable=work_tracking_client.get_work_item(id=x.id)
-        assignedTo = (variable.fields['System.AssignedTo'])
-        teamEmail = re.findall(r"([a-zA-Z0-9-_.]+@[a-zA-Z0-9-_.]+)", assignedTo)
-        teamName = re.findall(r"[^\.]+", teamEmail[0])
-        priority = (variable.fields['Microsoft.VSTS.Common.Priority'])
-        systemTitle = (variable.fields['System.Title'])
-        link = variable.url
-        idNumber = variable.id
-        result = "-----------------------------------------------------------------------------------------\nAssigned to: " + str(teamName[0]) + "\nTitle: " + str(systemTitle) + "\nPriority: " + str(priority) + "\nLink: " + str(link) + "\n-----------------------------------------------------------------------------------------"
-        textFile=open("fib.txt","a")
-        emailMessage = textFile.write(result+"\n") 
-        textFile.close()
-        z=z+1
-                
-
-#Contains email login/connection and sends the text file to the email
-        if z >= 1:
-            def send_email(subject, msg):
-                    try: 
-                        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                        server.login("workitemtracker@gmail.com", "Stephanie16")
-                        message = 'Subject: {}\n\n{}'.format(subject, msg)
-                        server.sendmail("workitemtracker@gmail.com", "workitemtracker@gmail.com", message)    
-                        server.quit()
-                        print("Email sent successfully!!!!!!")
-                    except:
-                        print("Email failed to send!")    
-            subject = "Work-Item Alert"
-            fileOut=open("fib.txt", "r")
-            fileContent = fileOut.read()
-            msg = ("This item(s) has not been updated in the past 30 days.\n\n" + result)
-            fileOut.close()
-            #send_email(subject, msg)
-#Deletes file after sending the email so that next time the code runs it wont add to the past items
-            os.remove("fib.txt")
-        elif z == 0:
-            print("Congratulation no work items are needed to be worked on")
-    print("File Removed!")
-    print("Monday-Thursday")
-    print("Number of work items : " + str(z))
 
 
