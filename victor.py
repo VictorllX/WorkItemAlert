@@ -49,8 +49,8 @@ def get_work_items_upto(work_tracking_client, team_context, max_id):
 
 
 # Fill in with your personal access token and org URL
-personal_access_token = 'token'
-organization_url = 'org'
+personal_access_token = 'kgsuw6cgpyo2t5xte3gz2nd3krqhewi7iif5bcuqelf4bdjeqafq'
+organization_url = 'https://dev.azure.com/CBTS-Internal'
 
 # Create a connection to the org
 credentials = BasicAuthentication('', personal_access_token)
@@ -167,9 +167,9 @@ for name in names:
                 try:
                     print(3) 
                     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                    account = server.login("email", "pass")
+                    account = server.login("workitemtracker@gmail.com", "Stephanie16")
                     message = 'Subject: {}\n\n{}'.format(subject, msg)
-                    sendToUser = server.sendmail("email", email, message)    
+                    sendToUser = server.sendmail("workitemtracker@gmail.com", "workitemtracker@gmail.com", message)    
                     server.quit()
                     print("Email sent successfully!!!!!!")
                 except:
@@ -180,9 +180,9 @@ for name in names:
             countOut=open("count.txt", "r")
             countContent = countOut.read()
             if count == 1:
-                msg = ("This active item has not been updated in the past 30 days.\n\n" + fileContent)
+                msg = ("This active work-item has not been updated in the past 30 days.\n\n" + fileContent)
             if count >1:
-                msg = ("These active items have not been updated in the past 30 days.\n\n" + fileContent)       
+                msg = ("These active work-items have not been updated in the past 30 days.\n\n" + fileContent)       
             fileOut.close()
             send_email(subject, msg)
         elif count == 0:
@@ -202,9 +202,9 @@ if z > 0:
             try:
                 print(3) 
                 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                account = server.login("email", "pass")
+                account = server.login("workitemtracker@gmail.com", "Stephanie16")
                 message = 'Subject: {}\n\n{}'.format(subject, msg)
-                sendToTeam = server.sendmail("email", "DL-Cloud-Transformation@cbts.com", message)    
+                sendToTeam = server.sendmail("workitemtracker@gmail.com", "workitemtracker@gmail.com", message)    
                 server.quit()
                 print("Email sent successfully!!!!!!")
             except:
@@ -216,9 +216,9 @@ if z > 0:
         countContent = countOut.read()
     
         if z == 1:
-            msg = ("There is " + str(z) + " item that has not been updated in the past 30 days.\n\n" + fileContent)
+            msg = ("There is " + str(z) + " work-item that has not been updated in the past 30 days.\n\n" + fileContent)
         if z > 1:
-            msg = ("These " + str(z) + " active items have not been updated in the past 30 days.\n\n"+countContent + fileContent)
+            msg = ("These " + str(z) + " active work-items have not been updated in the past 30 days.\n\n"+countContent + fileContent)
         fileOut.close()
         countOut.close()
         send_email(subject, msg)
@@ -229,5 +229,4 @@ elif z == 0:
     print("No email ")              
 print(z)
 exit()
-
 
