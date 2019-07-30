@@ -49,8 +49,8 @@ def get_work_items_upto(work_tracking_client, team_context, max_id):
 
 
 # Fill in with your personal access token and org URL
-personal_access_token = 'token'
-organization_url = 'org'
+personal_access_token = 'kgsuw6cgpyo2t5xte3gz2nd3krqhewi7iif5bcuqelf4bdjeqafq'
+organization_url = 'https://dev.azure.com/CBTS-Internal'
 
 # Create a connection to the org
 credentials = BasicAuthentication('', personal_access_token)
@@ -167,9 +167,9 @@ for name in names:
                 try:
                     print(3) 
                     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                    account = server.login("email", "pass")
+                    account = server.login("workitemtracker@gmail.com", "Stephanie16")
                     message = 'Subject: {}\n\n{}'.format(subject, msg)
-                    sendToUser = server.sendmail("email", email, message)    
+                    sendToUser = server.sendmail("workitemtracker@gmail.com", "workitemtracker@gmail.com", message)    
                     server.quit()
                     print("Email sent successfully!!!!!!")
                 except:
@@ -202,9 +202,9 @@ if z > 0:
             try:
                 print(3) 
                 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                account = server.login("email", "pass")
+                account = server.login("workitemtracker@gmail.com", "Stephanie16")
                 message = 'Subject: {}\n\n{}'.format(subject, msg)
-                sendToTeam = server.sendmail("email", "team email", message)    
+                sendToTeam = server.sendmail("workitemtracker@gmail.com", "workitemtracker@gmail.com", message)    
                 server.quit()
                 print("Email sent successfully!!!!!!")
             except:
