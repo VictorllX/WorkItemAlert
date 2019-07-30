@@ -49,8 +49,8 @@ def get_work_items_upto(work_tracking_client, team_context, max_id):
 
 
 # Fill in with your personal access token and org URL
-personal_access_token = 'kgsuw6cgpyo2t5xte3gz2nd3krqhewi7iif5bcuqelf4bdjeqafq'
-organization_url = 'https://dev.azure.com/CBTS-Internal'
+personal_access_token = 'token'
+organization_url = 'org'
 
 # Create a connection to the org
 credentials = BasicAuthentication('', personal_access_token)
@@ -112,6 +112,7 @@ for x in query_results.work_items:
     # setting data into the main dict
     tmp = {
         'Name': name,
+        'Email': email,
         'Title': title,
         'Priority': priority,
         'Url': "https://dev.azure.com/cbts-internal/Cloud-Transformation/_workitems/edit/" + idNum +"/"
@@ -139,6 +140,8 @@ for name in names:
        
         if item['Name'] == name:
             count += 1
+            emails = str(item['Email']) #Group email
+            print("EMAILLLLLS"+emails)
             result = "\n-----------------------------------------------------------------------------------------------------------------------------\n"+"Assigned to: "+ str(item['Name']) + "\nItem number: "+ str(count) + "\nTitle: " + str(item['Title']) + "\nPriority: " + str(item['Priority']) + "\nLink: " + str(item['Url'])
             print(result)    
             
@@ -163,17 +166,18 @@ for name in names:
         if date.today().weekday() < 4:
             print("Mon-Thurs")
             def send_email(subject, msg):
-                print(2)
+                
                 try:
-                    print(3) 
+                    print("!!!!!"+emails)
                     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                    account = server.login("workitemtracker@gmail.com", "Stephanie16")
+                    account = server.login("email", "pass")
                     message = 'Subject: {}\n\n{}'.format(subject, msg)
-                    sendToUser = server.sendmail("workitemtracker@gmail.com", "workitemtracker@gmail.com", message)    
+                    sendToUser = server.sendmail("email", emails, message)    
                     server.quit()
                     print("Email sent successfully!!!!!!")
                 except:
-                    print("Email failed to send!")    
+                    print("Email failed to send!")   
+                     
             subject = "Work-Item Alert"
             fileOut=open("email.txt", "r")
             fileContent = fileOut.read()
@@ -184,10 +188,13 @@ for name in names:
             if count >1:
                 msg = ("These active work-items have not been updated in the past 30 days.\n\n" + fileContent)       
             fileOut.close()
+            countOut.close()
             send_email(subject, msg)
+            os.remove("email.txt")
+            os.remove("count.txt")
         elif count == 0:
             print("no email")    
-        os.remove("email.txt")
+
     
         
 
@@ -197,19 +204,19 @@ print("Day of the week: " + str(date.today().weekday()))
 if z > 0:
     if date.today().weekday() == 4:
         print("Friday")
-        def send_email(subject, msg):
-            print(2)
+        def send_emails(subject, msg):
             try:
-                print(3) 
+                print(3)
                 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                account = server.login("workitemtracker@gmail.com", "Stephanie16")
+                account = server.login("email", "pass")
                 message = 'Subject: {}\n\n{}'.format(subject, msg)
-                sendToTeam = server.sendmail("workitemtracker@gmail.com", "workitemtracker@gmail.com", message)    
+                sendToTeam = server.sendmail("email", "DL-Cloud-Transformation...", message)    
                 server.quit()
                 print("Email sent successfully!!!!!!")
             except:
                 print("Email failed to send!")    
         subject = "Work-Item Alert"
+        
         fileOut=open("email.txt", "r")
         fileContent = fileOut.read()
         countOut=open("count.txt", "r")
@@ -221,7 +228,7 @@ if z > 0:
             msg = ("These " + str(z) + " active work-items have not been updated in the past 30 days.\n\n"+countContent + fileContent)
         fileOut.close()
         countOut.close()
-        send_email(subject, msg)
+        send_emails(subject, msg)
 #Deletes file after sending the email so that next time the code runs it wont add to the past items
         os.remove("email.txt")
         os.remove("count.txt")  
